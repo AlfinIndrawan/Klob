@@ -10,7 +10,7 @@ import SwiftUI
 struct JobAppliedList: View {
 		var body: some View {
 			List {
-				Text("Lowongan Pekerjaan")
+				Text("Lamaran Terkirim")
 					.listRowBackground(Color.clear)
 					.listRowSeparator(.hidden)
 					.offset(x: -15)

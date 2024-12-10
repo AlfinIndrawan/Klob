@@ -30,7 +30,6 @@ struct NavigationTopView: View {
 					
 					Button(action: {
 						selection = 1 // Navigate to Job List
-						print("job list", selection)
 					}) {
 							Text("Lowongan Terkirim")
 								.font(.caption)
