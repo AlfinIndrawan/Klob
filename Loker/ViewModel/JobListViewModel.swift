@@ -8,43 +8,42 @@
 import Foundation
 
 class JobListViewModel: ObservableObject {
-	@Published var jobList: [JobModel] = []
-	@Published var appliedList: [JobModel] = []
+	@Published var jobList: [JobResponseModel] = []
+	@Published var appliedList: [JobResponseModel] = []
 	
 	let APIurl = "https://test-server-klob.onrender.com/fakeJob/apple/academy"
-
-	func fetchJobData(completion: @escaping (Result<[JobModel], Error>) -> Void) {
-		
+	var isLoading: Bool = false
+	
+	func fetchJobData() async {
+		self.isLoading = true
 		guard let url = URL(string: APIurl) else {
-			completion(.failure(NSError(domain: "Invalid URL", code: -1, userInfo: nil)))
+			print("Invalid URL")
 			return
 		}
 		
-		URLSession.shared.dataTask(with: url) { data, response, error in
-			if let error = error {
-				print("Error to fetch")
-				completion(.failure(error))
+		do {
+			let (data, response) = try await URLSession.shared.data(from: url)
+			
+			guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+				print("Error: \(response)")
 				return
 			}
 			
-			guard let data = data else {
-				completion(.failure(NSError(domain: "No data", code: -2, userInfo: nil)))
-				return
-			}
-			
-			do {
-				let decoder = JSONDecoder()
-//				decoder.keyDecodingStrategy = .convertFromSnakeCase
-				let jobListDecoded = try decoder.decode([JobModel].self, from: data)
+			let jobListDecoded = try JSONDecoder().decode([JobResponseModel].self, from: data)
+			await MainActor.run {
 				self.jobList = jobListDecoded
-				completion(.success(jobListDecoded))
-			} catch {
-				print("Error to decode")
-				completion(.failure(error))
+				self.isLoading = false
 			}
-		}.resume()
+			print(jobListDecoded)
+
+		} catch {
+			print("error to decode")
+			DispatchQueue.main.async {
+				self.isLoading = false
+			}
+			return
+			
+		}
 	}
-
-
-
+	
 }

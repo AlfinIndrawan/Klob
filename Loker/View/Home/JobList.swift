@@ -8,14 +8,18 @@
 import SwiftUI
 
 struct JobList: View {
-    var body: some View {
+	@EnvironmentObject var JobListVM: JobListViewModel
+	
+	var body: some View {
+		ForEach(JobListVM.jobList, id: \.jobVacancyCode) { job in
 			HStack(alignment: .top) {
-				// Image at the top leading
-				Image("1")
-					.resizable()
-					.frame(width: 50, height: 50)
-					.clipShape(RoundedRectangle(cornerRadius: 8))
-					.padding(.trailing, 8)
+				AsyncImage(url: URL(string: job.corporateLogo)) { image in
+					image.image?
+						.resizable()
+						.frame(width: 50, height: 50)
+						.aspectRatio(contentMode: .fill)
+				}
+				
 				
 				// Content section
 				VStack(alignment: .leading, spacing: 5) {
@@ -57,17 +61,31 @@ struct JobList: View {
 								.font(.caption)
 								.foregroundColor(.white)
 								.padding(.vertical, 10)
-								.padding(.horizontal, 10)
-								.background(RoundedRectangle(cornerRadius: 10).fill(Color("Button")))
+								.padding(.horizontal, 20)
+								.background(RoundedRectangle(cornerRadius: 15).fill(Color("Button")))
 						}
 					}
 					
 				}
 			}
 			.padding(.vertical, 10)
-    }
+			.listRowBackground(
+				RoundedRectangle(cornerRadius: 5)
+					.background(.clear)
+					.foregroundColor(.white)
+					.padding(
+						EdgeInsets(
+							top: 5,
+							leading: 10,
+							bottom: 5,
+							trailing: 10
+						)
+					)
+			) // list row background
+		} // for each
+	}
 }
 
 #Preview {
-    JobList()
+	JobList()
 }
