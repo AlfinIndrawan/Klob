@@ -46,6 +46,7 @@ struct NavigationTopView: View {
 
 struct TabContentView: View {
 	@Binding var selection: Int // Binding to track the selected tab
+	@StateObject var jobVM = JobListViewModel()
 	
 	var body: some View {
 		Group {
@@ -53,9 +54,11 @@ struct TabContentView: View {
 			case 0:
 				// First Tab: Home
 				JobView()
+					.environmentObject(jobVM)
 			case 1:
 				// Second Tab: Job List
 				JobAppliedList() // Add your list view here
+					.environmentObject(jobVM)
 			default:
 				Text("Error: Tab Not Found")
 			}

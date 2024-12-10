@@ -20,43 +20,45 @@ struct JobList: View {
 						.aspectRatio(contentMode: .fill)
 				}
 				
-				
 				// Content section
 				VStack(alignment: .leading, spacing: 5) {
 					// Title and subtitle
-					Text("DB Master Staff")
+					Text("\(job.positionName)")
 						.font(.headline)
 						.foregroundColor(.accentColor)
 						.bold()
-					Text("Bank Mandiri")
+					Text("\(job.corporateName)")
 						.font(.subheadline)
 						.bold()
 						.foregroundColor(.accentColor)
 					
 					// Employment type and salary
 					HStack {
-						Text("Karyawan Tetap")
+						Text("\(job.status)")
 							.font(.caption)
 							.foregroundColor(.accentColor)
 						Spacer()
-						Text("IDR 1.000.000 - 5.000.000")
-							.font(.caption)
-							.foregroundColor(.blue)
-							.padding(.vertical, 5)
-							.padding(.horizontal, 10)
-							.background(RoundedRectangle(cornerRadius: 8).fill(Color.blue.opacity(0.1)))
+						if job.salaryFrom != 0 {
+							Text("IDR \(job.salaryFrom) - \(job.salaryTo)")
+								.font(.caption)
+								.foregroundColor(.blue)
+								.padding(.vertical, 5)
+								.padding(.horizontal, 10)
+								.background(RoundedRectangle(cornerRadius: 8).fill(Color.blue.opacity(0.1)))
+						}
 					}
 					.padding(.bottom, 10)
 					
 					// Date and button
 					HStack {
-						Text("19 days ago")
+						Text("\(job.postedDate ?? "-")")
 							.font(.caption)
 							.foregroundColor(.accentColor)
 						Spacer()
-						Button(action: {
+						Button {
 							print("Apply button tapped")
-						}) {
+							JobListVM.applyJob(data: job)
+						} label: {
 							Text("LAMAR")
 								.font(.caption)
 								.foregroundColor(.white)
@@ -64,6 +66,8 @@ struct JobList: View {
 								.padding(.horizontal, 20)
 								.background(RoundedRectangle(cornerRadius: 15).fill(Color("Button")))
 						}
+						.buttonStyle(.borderless)
+					
 					}
 					
 				}

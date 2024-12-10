@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct JobView: View {
-	@StateObject var JobVM = JobListViewModel()
+	@EnvironmentObject var JobVM: JobListViewModel
 	
 	var body: some View {
 		List {

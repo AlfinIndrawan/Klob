@@ -9,7 +9,7 @@ import Foundation
 
 class JobListViewModel: ObservableObject {
 	@Published var jobList: [JobResponseModel] = []
-	@Published var appliedList: [JobResponseModel] = []
+  var appliedList: [JobResponseModel] = []
 	
 	let APIurl = "https://test-server-klob.onrender.com/fakeJob/apple/academy"
 	var isLoading: Bool = false
@@ -35,7 +35,7 @@ class JobListViewModel: ObservableObject {
 				self.isLoading = false
 			}
 			print(jobListDecoded)
-
+			
 		} catch {
 			print("error to decode")
 			DispatchQueue.main.async {
@@ -43,6 +43,16 @@ class JobListViewModel: ObservableObject {
 			}
 			return
 			
+		}
+	}
+	
+	func applyJob(data: JobResponseModel) {
+		// check dupllicates
+		if !self.appliedList.contains(where: { $0.jobVacancyCode == data.jobVacancyCode }) {
+			self.appliedList.append(data)
+			print("job applied")
+		} else {
+			print("This job has already been applied for.")
 		}
 	}
 	
