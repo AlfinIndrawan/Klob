@@ -12,36 +12,34 @@ struct NavigationTopView: View {
 	
 	var body: some View {
 		ZStack(alignment: .top) {
-			TabView(selection: $selection) {
 				HStack {
 					Image(systemName: "house")
 						.resizable()
 						.frame(width: 24, height: 24)
+
 					Spacer()
+					
 					Button(action: {
 						selection = 0 // Navigate to Home
 					}) {
-						VStack {
-							
-							Text("Lowongan Kerja")
+							Text("Lowongan Kerja |")
 								.font(.caption)
-						}
 					}
 					.foregroundColor(selection == 0 ? .blue : .gray)
+					
 					
 					Button(action: {
 						selection = 1 // Navigate to Job List
 						print("job list", selection)
 					}) {
-						VStack {
 							Text("Lowongan Terkirim")
 								.font(.caption)
-						}
 					}
 					.foregroundColor(selection == 1 ? .blue : .gray)
+					.contentMargins(20)
+					
 				}
 				.padding()
-			} // tabview
 		} // zstack
 		.frame(height: 50)
 	}
